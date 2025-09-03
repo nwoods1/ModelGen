@@ -1,0 +1,34 @@
+{
+  "id": "4f4be3de2443470a9bfb47691fdddf05",
+  "title": "My 3D Session",
+  "created_at": 1756784866.2090895,
+  "defaults": {
+    "seed": 0,
+    "guidance_scale": 15.0,
+    "num_inference_steps": 64
+  },
+  "items": [
+    {
+      "id": "3622734b6dbe4a67b6233df678db6712",
+      "prompt": "Task: Generate a 3D mesh.\n\nUpdate instructions:\n- make paws bigger\n\nConstraints:\n- Camera-neutral (not an image render).\n- Coherent topology.\n- Keep proportions from context unless directly changed above.\n- If colors are specified, apply them to materials.\n\nOutput: A single .glb file.\n",
+      "params": {
+        "seed": 0,
+        "guidance_scale": 15.0,
+        "num_inference_steps": 64
+      },
+      "url": "/static/models/1cb12e90aecc4e3b8e35b993e8cf0250.glb",
+      "created_at": 1756863193.8392591
+    },
+    {
+      "id": "cb221893794d4ca48800997296bbf009",
+      "prompt": "Task: Generate a 3D mesh.\n\nPrevious design context:\n- Task: Generate a 3D mesh.\n\nUpdate instructions:\n- make paws bigger\n\nConstraints:\n- Camera-neutral (not an image render).\n- Coherent topology.\n- Keep proportions from context unless directly changed above.\n- If colors are specified, apply them to materials.\n\nOutput: A single .glb file.\n\n\nUpdate instructions:\n- Create a simple low-poly object.\n\nConstraints:\n- Camera-neutral (not an image render).\n- Coherent topology.\n- Keep proportions from context unless directly changed above.\n- If colors are specified, apply them to materials.\n\nOutput: A single .glb file.\n",
+      "params": {
+        "seed": 0,
+        "guidance_scale": 15.0,
+        "num_inference_steps": 64
+      },
+      "url": "/static/models/7bc119228ec34c929c496fab1fa7207f.glb",
+      "created_at": 1756863296.0386233
+    }
+  ]
+}

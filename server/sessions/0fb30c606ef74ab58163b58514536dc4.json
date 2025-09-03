@@ -1,0 +1,23 @@
+{
+  "id": "0fb30c606ef74ab58163b58514536dc4",
+  "title": "My 3D Session",
+  "created_at": 1756865638.203654,
+  "defaults": {
+    "seed": 0,
+    "guidance_scale": 15.0,
+    "num_inference_steps": 64
+  },
+  "items": [
+    {
+      "id": "9b12d5f7f8624d8ea1298eb2264fb16d",
+      "prompt": "Task: Generate a 3D mesh.\n\nUpdate instructions:\n- a rainboot\n\nConstraints:\n- Camera-neutral (not an image render).\n- Coherent topology.\n- Keep proportions from context unless directly changed above.\n- If colors are specified, apply them to materials.\n\nOutput: A single .glb file.\n",
+      "params": {
+        "seed": 0,
+        "guidance_scale": 15.0,
+        "num_inference_steps": 64
+      },
+      "url": "/static/models/5c4d0d7ed6ca486a81e9ce2d573bd4fd.glb",
+      "created_at": 1756865643.6964865
+    }
+  ]
+}

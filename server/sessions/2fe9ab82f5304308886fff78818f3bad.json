@@ -1,0 +1,67 @@
+{
+  "id": "2fe9ab82f5304308886fff78818f3bad",
+  "title": "My 3D Session",
+  "created_at": 1756760979.9740427,
+  "defaults": {
+    "seed": 0,
+    "guidance_scale": 15.0,
+    "num_inference_steps": 64
+  },
+  "items": [
+    {
+      "id": "eebe62e126d740cf890d4abb8e14dca5",
+      "prompt": "Apply the following changes to the design: a cat",
+      "params": {
+        "seed": 0,
+        "guidance_scale": 15.0,
+        "num_inference_steps": 64
+      },
+      "url": "/static/models/a546c7649e0e42dfbb46c1416ec9b0e3.glb",
+      "created_at": 1756760998.7768
+    },
+    {
+      "id": "98591b154e064011bc3800cafbc1a699",
+      "prompt": "Previous design context:\n- Apply the following changes to the design: a cat\n\nApply the following changes to the design: add a third ear",
+      "params": {
+        "seed": 0,
+        "guidance_scale": 15.0,
+        "num_inference_steps": 64
+      },
+      "url": "/static/models/4176859cf3084564b6d395cf89742cfb.glb",
+      "created_at": 1756761035.4393613
+    },
+    {
+      "id": "0996374060e44d709d7b239ddf9b0d82",
+      "prompt": "Previous design context:\n- Apply the following changes to the design: a cat\n- Previous design context:\n- Apply the following changes to the design: a cat\n\nApply the following changes to the design: add a third ear\n\nApply the following changes to the design: add stripes",
+      "params": {
+        "seed": 0,
+        "guidance_scale": 15.0,
+        "num_inference_steps": 64
+      },
+      "url": "/static/models/60d583cb87d64082bb1439afa44f665f.glb",
+      "created_at": 1756761074.956762
+    },
+    {
+      "id": "ad9b123bb6284250b3c60304baee1880",
+      "prompt": "Previous design context:\n- Apply the following changes to the design: a cat\n- Previous design context:\n- Apply the following changes to the design: a cat\n\nApply the following changes to the design: add a third ear\n- Previous design context:\n- Apply the following changes to the design: a cat\n- Previous design context:\n- Apply the following changes to the design: a cat\n\nApply the following changes to the design: add a third ear\n\nApply the following changes to the design: add stripes\n\nApply the following changes to the design: make the ears smaller",
+      "params": {
+        "seed": 0,
+        "guidance_scale": 15.0,
+        "num_inference_steps": 64
+      },
+      "url": "/static/models/17ebfefaac3f46f3b089aae7087b6c60.glb",
+      "created_at": 1756761107.322805
+    },
+    {
+      "id": "9261f5e60a46468a96e51be5337ca4db",
+      "prompt": "Previous design context:\n- Previous design context:\n- Apply the following changes to the design: a cat\n\nApply the following changes to the design: add a third ear\n- Previous design context:\n- Apply the following changes to the design: a cat\n- Previous design context:\n- Apply the following changes to the design: a cat\n\nApply the following changes to the design: add a third ear\n\nApply the following changes to the design: add stripes\n- Previous design context:\n- Apply the following changes to the design: a cat\n- Previous design context:\n- Apply the following changes to the design: a cat\n\nApply the following changes to the design: add a third ear\n- Previous design context:\n- Apply the following changes to the design: a cat\n- Previous design context:\n- Apply the following changes to the design: a cat\n\nApply the following changes to the design: add a third ear\n\nApply the following changes to the design: add stripes\n\nApply the following changes to the design: make the ears smaller\n\nApply the following changes to the design: small ears",
+      "params": {
+        "seed": 0,
+        "guidance_scale": 15.0,
+        "num_inference_steps": 64
+      },
+      "url": "/static/models/a380354fb90f44caacacdbd03afbe164.glb",
+      "created_at": 1756761143.1635416
+    }
+  ]
+}

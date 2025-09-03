@@ -1,0 +1,23 @@
+{
+  "id": "9d5f71c8a83e4397a5d58eafae88062b",
+  "title": "My 3D Session",
+  "created_at": 1756865730.4436853,
+  "defaults": {
+    "seed": 0,
+    "guidance_scale": 15.0,
+    "num_inference_steps": 64
+  },
+  "items": [
+    {
+      "id": "72dcade1511d434e828545f753043298",
+      "prompt": "Task: Generate a 3D mesh.\n\nUpdate instructions:\n- Create a simple low-poly object.\n\nConstraints:\n- Camera-neutral (not an image render).\n- Coherent topology.\n- Keep proportions from context unless directly changed above.\n- If colors are specified, apply them to materials.\n\nOutput: A single .glb file.\n",
+      "params": {
+        "seed": 0,
+        "guidance_scale": 15.0,
+        "num_inference_steps": 64
+      },
+      "url": "/static/models/8c526cad4fc54060a28fefc535693e33.glb",
+      "created_at": 1756865730.4617586
+    }
+  ]
+}

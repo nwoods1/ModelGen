@@ -1,0 +1,45 @@
+{
+  "id": "99a5a3c18d9d4c9abe91cddbe645a005",
+  "title": "My 3D Session",
+  "created_at": 1756760869.6574507,
+  "defaults": {
+    "seed": 0,
+    "guidance_scale": 15.0,
+    "num_inference_steps": 64
+  },
+  "items": [
+    {
+      "id": "f730ad976bfe4ccd8b7cacb8a3f1e925",
+      "prompt": "Apply the following changes to the design: a low-poly robot with antennae",
+      "params": {
+        "seed": 0,
+        "guidance_scale": 15.0,
+        "num_inference_steps": 64
+      },
+      "url": "/static/models/1c56957092174d5287f56d4b20d67e39.glb",
+      "created_at": 1756760875.1679409
+    },
+    {
+      "id": "7aba56f220be41f6b5e13834a22d6ae2",
+      "prompt": "Previous design context:\n- Apply the following changes to the design: a low-poly robot with antennae\n\nApply the following changes to the design: a low-poly robot with antennae",
+      "params": {
+        "seed": 0,
+        "guidance_scale": 15.0,
+        "num_inference_steps": 64
+      },
+      "url": "/static/models/aefaadc4dea44681b9657c3bc47684a2.glb",
+      "created_at": 1756760880.085409
+    },
+    {
+      "id": "8c04ef0b1504429083466d61e36de874",
+      "prompt": "Previous design context:\n- Apply the following changes to the design: a low-poly robot with antennae\n- Previous design context:\n- Apply the following changes to the design: a low-poly robot with antennae\n\nApply the following changes to the design: a low-poly robot with antennae\n\nApply the following changes to the design: make it blue",
+      "params": {
+        "seed": 0,
+        "guidance_scale": 15.0,
+        "num_inference_steps": 64
+      },
+      "url": "/static/models/fe9ff2f3ae07401195780bb98212c1c1.glb",
+      "created_at": 1756760953.7106757
+    }
+  ]
+}
