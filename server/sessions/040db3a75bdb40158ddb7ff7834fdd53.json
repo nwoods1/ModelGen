@@ -1,0 +1,45 @@
+{
+  "id": "040db3a75bdb40158ddb7ff7834fdd53",
+  "title": "My 3D Session",
+  "created_at": 1756915392.3321066,
+  "defaults": {
+    "seed": 0,
+    "guidance_scale": 15.0,
+    "num_inference_steps": 64
+  },
+  "items": [
+    {
+      "id": "c971b4e9568b46a68bc78e5056fb0ceb",
+      "prompt": "Task: Generate a 3D mesh.\n\nUpdate instructions:\n- a strawberry\n\nConstraints:\n- Camera-neutral (not an image render).\n- Coherent topology.\n- Keep proportions from context unless directly changed above.\n- If colors are specified, apply them to materials.\n\nOutput: A single .glb file.\n",
+      "params": {
+        "seed": 0,
+        "guidance_scale": 15.0,
+        "num_inference_steps": 64
+      },
+      "url": "/static/models/03bb9fa98a1d49ecb6f4e3675538fa2e.glb",
+      "created_at": 1756915401.203153
+    },
+    {
+      "id": "c6da3970d5f04eff958a6c2f3980198c",
+      "prompt": "Task: Generate a 3D mesh.\n\nPrevious design context:\n- Task: Generate a 3D mesh.\n\nUpdate instructions:\n- a strawberry\n\nConstraints:\n- Camera-neutral (not an image render).\n- Coherent topology.\n- Keep proportions from context unless directly changed above.\n- If colors are specified, apply them to materials.\n\nOutput: A single .glb file.\n\n\nUpdate instructions:\n- a strawberry\n\nConstraints:\n- Camera-neutral (not an image render).\n- Coherent topology.\n- Keep proportions from context unless directly changed above.\n- If colors are specified, apply them to materials.\n\nOutput: A single .glb file.\n",
+      "params": {
+        "seed": 2,
+        "guidance_scale": 15.0,
+        "num_inference_steps": 64
+      },
+      "url": "/static/models/8b43b2e8733f4659a5d573869e37561b.glb",
+      "created_at": 1756915450.6698322
+    },
+    {
+      "id": "f8ef2071baec41c0b71550493b276e99",
+      "prompt": "Task: Generate a 3D mesh.\n\nPrevious design context:\n- Task: Generate a 3D mesh.\n\nUpdate instructions:\n- a strawberry\n\nConstraints:\n- Camera-neutral (not an image render).\n- Coherent topology.\n- Keep proportions from context unless directly changed above.\n- If colors are specified, apply them to materials.\n\nOutput: A single .glb file.\n\n- Task: Generate a 3D mesh.\n\nPrevious design context:\n- Task: Generate a 3D mesh.\n\nUpdate instructions:\n- a strawberry\n\nConstraints:\n- Camera-neutral (not an image render).\n- Coherent topology.\n- Keep proportions from context unless directly changed above.\n- If colors are specified, apply them to materials.\n\nOutput: A single .glb file.\n\n\nUpdate instructions:\n- a strawberry\n\nConstraints:\n- Camera-neutral (not an image render).\n- Coherent topology.\n- Keep proportions from context unless directly changed above.\n- If colors are specified, apply them to materials.\n\nOutput: A single .glb file.\n\n\nUpdate instructions:\n- low poly\n\nConstraints:\n- Camera-neutral (not an image render).\n- Coherent topology.\n- Keep proportions from context unless directly changed above.\n- If colors are specified, apply them to materials.\n\nOutput: A single .glb file.\n",
+      "params": {
+        "seed": 0,
+        "guidance_scale": 15.0,
+        "num_inference_steps": 64
+      },
+      "url": "/static/models/9600ad6cf36c4c669b18dd5176d845bc.glb",
+      "created_at": 1756915476.599457
+    }
+  ]
+}

@@ -1,16 +1,13 @@
 # server/main.py
-import os, uuid, json, time, shutil, requests, logging, tempfile, io
+import os, uuid, json, time, shutil, requests, logging
 from pathlib import Path
 from typing import Optional, Iterable, Dict, Any, List
-
-from fastapi import FastAPI, HTTPException, UploadFile, File, Form
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 from hashlib import sha256
-
-from gradio_client import Client, handle_file
-from PIL import Image
+from gradio_client import Client
 
 logger = logging.getLogger("uvicorn.error")
 
@@ -33,7 +30,7 @@ PLACEHOLDER = MODELS_DIR / "placeholder.glb"  # optional: put a small .glb here 
 # -------------------
 # FastAPI & CORS
 # -------------------
-app = FastAPI(title="Shap-E bridge (text & image)")
+app = FastAPI(title="Shap-E bridge")
 
 app.add_middleware(
     CORSMiddleware,
@@ -67,15 +64,6 @@ def cache_key(prompt: str, seed: int, guidance_scale: float, num_inference_steps
         sort_keys=True,
     )
     return sha256(raw.encode("utf-8")).hexdigest()
-
-def cache_key_image(image_bytes: bytes, seed: int, guidance_scale: float, num_inference_steps: int) -> str:
-    raw = {
-        "seed": seed,
-        "guidance_scale": guidance_scale,
-        "num_inference_steps": num_inference_steps,
-        "image_sha256": sha256(image_bytes).hexdigest(),
-    }
-    return sha256(json.dumps(raw, sort_keys=True).encode("utf-8")).hexdigest()
 
 # -------------------
 # Schemas
@@ -245,22 +233,6 @@ Output: A single .glb file.
 """
     return template
 
-# -------------------
-# Image preproc
-# -------------------
-def _prepare_image_bytes(raw: bytes, max_side: int = 1024) -> bytes:
-    """Downscale very large inputs to keep the Space stable; return PNG bytes."""
-    try:
-        img = Image.open(io.BytesIO(raw)).convert("RGB")
-    except Exception:
-        return raw
-    w, h = img.size
-    scale = min(1.0, max_side / float(max(w, h)))
-    if scale < 1.0:
-        img = img.resize((int(w * scale), int(h * scale)), Image.LANCZOS)
-    buf = io.BytesIO()
-    img.save(buf, format="PNG")
-    return buf.getvalue()
 
 # -------------------
 # Model callers (Gradio client)
@@ -280,23 +252,6 @@ def safe_call_text(prompt: str, seed: int, guidance_scale: float, num_inference_
             return str(PLACEHOLDER)
         raise
 
-def safe_call_image(image_path: str, seed: int, guidance_scale: float, num_inference_steps: int):
-    """
-    Shap-E image->3D call. IMPORTANT: use handle_file(...) and the explicit api_name.
-    """
-    try:
-        return client.predict(
-            image=handle_file(image_path),
-            seed=seed,
-            guidance_scale=guidance_scale,
-            num_inference_steps=num_inference_steps,
-            api_name="/image-to-3d",
-        )
-    except Exception as e:
-        msg = str(e)
-        if ("GPU quota" in msg or "exceeded" in msg) and PLACEHOLDER.exists():
-            return str(PLACEHOLDER)
-        raise
 
 # -------------------
 # Routes
@@ -314,48 +269,6 @@ def gen3d(req: GenReq):
         return GenResp(id=Path(hit).stem, url=hit)
 
     result = safe_call_text(req.prompt, req.seed, req.guidance_scale, req.num_inference_steps)
-    out_path = _materialize_to_models(result)
-    rel = f"/{out_path.relative_to(BASE_DIR).as_posix()}"
-    cache_put(key, rel)
-    return GenResp(id=out_path.stem, url=rel)
-
-# ----- Image one-off -----
-@app.post("/image3d", response_model=GenResp)
-async def image3d(
-    image: UploadFile = File(...),
-    seed: int = Form(0),
-    guidance_scale: float = Form(15),
-    num_inference_steps: int = Form(64),
-):
-    if image.content_type and not image.content_type.startswith(("image/", "application/octet-stream")):
-        raise HTTPException(415, f"Unsupported file type: {image.content_type}")
-
-    raw = await image.read()
-    if not raw:
-        raise HTTPException(400, "Uploaded image is empty")
-    safe_bytes = _prepare_image_bytes(raw, max_side=1024)
-
-    # cache
-    key = cache_key_image(safe_bytes, seed, guidance_scale, num_inference_steps)
-    hit = cache_get(key)
-    if hit:
-        return GenResp(id=Path(hit).stem, url=hit)
-
-    # write temp PNG and call Space
-    with tempfile.NamedTemporaryFile(delete=False, suffix=".png") as tmp:
-        tmp.write(safe_bytes)
-        tmp_path = tmp.name
-
-    try:
-        result = safe_call_image(tmp_path, seed, guidance_scale, num_inference_steps)
-    except Exception as e:
-        raise HTTPException(502, f"Space call failed: {e}") from e
-    finally:
-        try:
-            os.remove(tmp_path)
-        except Exception:
-            pass
-
     out_path = _materialize_to_models(result)
     rel = f"/{out_path.relative_to(BASE_DIR).as_posix()}"
     cache_put(key, rel)
@@ -418,7 +331,7 @@ def session_append(req: AppendReq):
             "id": uuid.uuid4().hex,
             "prompt": composite_prompt,
             "params": params,
-            "url": hit,
+            "url": hit, 
             "created_at": time.time(),
         }
         data["items"].append(item); _save_session(data)

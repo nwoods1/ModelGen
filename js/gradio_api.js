@@ -23,25 +23,6 @@ export async function textTo3D({ prompt, seed, guidance_scale, num_inference_ste
   return { url: absolute, id: data.id };
 }
 
-
-export async function imageTo3D({ file, guidance_scale, num_inference_steps, onStatus, onProgress }) {
-  onStatus?.("Uploading to TRELLIS…");
-  const fd = new FormData();
-  fd.append("image", file);
-  fd.append("guidance_scale", guidance_scale);
-  fd.append("num_inference_steps", num_inference_steps);
-
-  const res = await fetch("http://localhost:8000/trellis/image3d", {
-    method: "POST",
-    body: fd,
-  });
-  if (!res.ok) throw new Error(await res.text());
-  const data = await res.json();
-  return data; // { url }
-}
-
-
-
 // --- sessions API ---
 export async function createSession({ title, seed, guidance_scale, num_inference_steps }) {
   const r = await fetch(`${BACKEND}/session/new`, {

@@ -1,5 +1,5 @@
 // app.js
-import { createSession, appendEdit, getSession, imageTo3D } from "./gradio_api.js";
+import { createSession, appendEdit, getSession } from "./gradio_api.js";
 import { viewer, loadGLB, getCurrentObject } from "./viewer.js";
 
 /* ---------------- UI refs ---------------- */
@@ -18,10 +18,6 @@ const ui = {
   continueToggle: document.getElementById("continueToggle"),
   newChat: document.getElementById("newChat"),
   historyList: document.getElementById("historyList"),
-  modeRadios: document.querySelectorAll('input[name="mode"]'),
-  imageUploader: document.getElementById("imageUploader"),
-  imageFile: document.getElementById("imageFile"),
-  imagePreview: document.getElementById("imagePreview"),
 };
 
 /* --------------- helpers --------------- */
@@ -103,11 +99,6 @@ async function refreshHistory() {
   }
 }
 
-function getMode() {
-  const el = Array.from(ui.modeRadios).find(r => r.checked);
-  return el ? el.value : "text";
-}
-
 /* -------- local edit (no re-gen) --------
    Edits act on the currently loaded model (from viewer.js)
 ------------------------------------------*/
@@ -155,24 +146,6 @@ function tryLocalEdit(editText) {
 
 /* --------------- UI wiring --------------- */
 
-// Toggle uploader visibility by mode
-ui.modeRadios.forEach(r => {
-  r.addEventListener("change", () => {
-    const mode = getMode();
-    ui.imageUploader.hidden = mode !== "image";
-  });
-});
-ui.imageUploader.hidden = getMode() !== "image";
-
-// Image preview
-ui.imageFile?.addEventListener("change", () => {
-  const f = ui.imageFile.files?.[0];
-  if (!f) { ui.imagePreview.hidden = true; return; }
-  const img = ui.imagePreview.querySelector("img");
-  img.src = URL.createObjectURL(f);
-  ui.imagePreview.hidden = false;
-});
-
 // New chat
 ui.newChat.addEventListener("click", async () => {
   try {
@@ -203,39 +176,6 @@ ui.generate.addEventListener("click", async () => {
     const num_inference_steps = Number(ui.steps.value) || 64;
 
     setProgress(null);
-
-    const mode = getMode();
-
-    // IMAGE MODE → /image3d
-    if (mode === "image") {
-      const file = ui.imageFile.files?.[0];
-      if (!file) { setStatus("Please choose an image."); return; }
-
-      try {
-        setStatus("Generating from image…");
-        const { url } = await imageTo3D({
-          file,
-          seed, guidance_scale, num_inference_steps,
-          onStatus: (msg) => setStatus(msg),
-          onProgress: (pct) => setProgress(pct),
-        });
-
-        setStatus("Loading preview…");
-        setProgress(95);
-        await loadGLB(url);
-        ui.download.href = url;
-        ui.download.download = "model.glb";
-        setProgress(100);
-        setStatus("Done ✔");
-      } catch (e) {
-        console.error(e);
-        setStatus(`Error: ${e.message || e}`);
-      } finally {
-        ui.generate.disabled = false;
-        setTimeout(clearProgress, 1000);
-      }
-      return;
-    }
 
     // TEXT MODE
     // First: attempt a local edit if a model is already loaded

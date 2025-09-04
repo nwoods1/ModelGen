@@ -76,22 +76,6 @@ textarea, input {
 #historyList li button { font-size: 12px; padding: 4px 8px; border-radius: 8px; border: 1px solid #d1d5db; background: white; cursor: pointer; }
 #historyList li .snippet { flex: 1; margin-right: 8px; color: #374151; font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-.uploader {
-  border: 1px dashed #cdd6ea;
-  background: #f7f9ff;
-  padding: 10px;
-  border-radius: 12px;
-  display: grid;
-  gap: 8px;
-}
-.uploader__preview img {
-  max-width: 100%;
-  height: auto;
-  border-radius: 8px;
-  display: block;
-}
-.inline { display: inline-flex; align-items: center; gap: 6px; }
-
 .view {
   height: 70vh;
   min-height: 400px;
