@@ -11,13 +11,17 @@ const ui = {
   generate: document.getElementById("generate"),
   download: document.getElementById("download"),
   status: document.getElementById("status"),
-  // viewer canvas is managed inside viewer.js via <canvas id="viewport">
   progress: document.getElementById("progress"),
   bar: document.querySelector("#progress .bar"),
   label: document.querySelector("#progress .label"),
   continueToggle: document.getElementById("continueToggle"),
   newChat: document.getElementById("newChat"),
   historyList: document.getElementById("historyList"),
+  scale: document.getElementById("scaleSlider"),
+  rotX: document.getElementById("rotX"),
+  rotY: document.getElementById("rotY"),
+  rotZ: document.getElementById("rotZ"),
+  color: document.getElementById("colorPicker"),
 };
 
 /* --------------- helpers --------------- */
@@ -78,6 +82,7 @@ function renderHistoryItems(items) {
       const absolute = it.url.startsWith("http") ? it.url : `http://localhost:8000${it.url}`;
       setStatus("Loading from history…");
       await loadGLB(absolute);
+      resetEditControls();
       ui.download.href = absolute;
       ui.download.download = "model.glb";
       setStatus("Loaded ✔");
@@ -99,9 +104,37 @@ async function refreshHistory() {
   }
 }
 
-/* -------- local edit (no re-gen) --------
-   Edits act on the currently loaded model (from viewer.js)
-------------------------------------------*/
+function resetEditControls() {
+  if (ui.scale) ui.scale.value = 1;
+  if (ui.rotX) ui.rotX.value = 0;
+  if (ui.rotY) ui.rotY.value = 0;
+  if (ui.rotZ) ui.rotZ.value = 0;
+  if (ui.color) ui.color.value = "#ffffff";
+}
+
+function applyTransforms() {
+  const root = getCurrentObject();
+  if (!root) return;
+  const s = parseFloat(ui.scale.value) || 1;
+  root.scale.setScalar(s);
+  const rx = (parseFloat(ui.rotX.value) || 0) * Math.PI / 180;
+  const ry = (parseFloat(ui.rotY.value) || 0) * Math.PI / 180;
+  const rz = (parseFloat(ui.rotZ.value) || 0) * Math.PI / 180;
+  root.rotation.set(rx, ry, rz);
+}
+
+function applyColor() {
+  const root = getCurrentObject();
+  if (!root) return;
+  const color = ui.color.value;
+  root.traverse(o => {
+    if (!o.material) return;
+    const mats = Array.isArray(o.material) ? o.material : [o.material];
+    mats.forEach(m => m.color && m.color.set(color));
+  });
+}
+
+
 function tryLocalEdit(editText) {
   const root = getCurrentObject();
   if (!root) return false;
@@ -205,6 +238,7 @@ ui.generate.addEventListener("click", async () => {
     setStatus("Loading preview…");
     setProgress(95);
     await loadGLB(url);
+    resetEditControls();
 
     ui.download.href = url;
     ui.download.download = "model.glb";
@@ -220,7 +254,15 @@ ui.generate.addEventListener("click", async () => {
   }
 });
 
-/* --------------- init --------------- */
+// edit panel events
+[ui.scale, ui.rotX, ui.rotY, ui.rotZ].forEach(el => {
+  el && el.addEventListener("input", applyTransforms);
+});
+ui.color && ui.color.addEventListener("input", applyColor);
+
+
+
+
 setStatus("Ready.");
 clearProgress();
 refreshHistory();

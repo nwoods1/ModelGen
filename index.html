@@ -40,6 +40,7 @@
       <div class="buttons">
         <button id="generate" class="btn">Generate</button>
         <a id="download" class="btn sec" href="#" download="model.glb">Download .glb</a>
+        <button id="openBlender" class="btn sec">Send to Blender</button>
       </div>
 
       <div id="status" class="status"></div>
@@ -66,6 +67,24 @@
 
     <main class="view">
       <canvas id="viewport"></canvas>
+      <div class="edit-panel">
+        <h3>Edit Model</h3>
+        <label>Scale
+          <input id="scaleSlider" type="range" min="0.1" max="3" step="0.01" value="1" />
+        </label>
+        <label>Rotate X
+          <input id="rotX" type="range" min="-180" max="180" value="0" />
+        </label>
+        <label>Rotate Y
+          <input id="rotY" type="range" min="-180" max="180" value="0" />
+        </label>
+        <label>Rotate Z
+          <input id="rotZ" type="range" min="-180" max="180" value="0" />
+        </label>
+        <label>Color
+          <input id="colorPicker" type="color" value="#ffffff" />
+        </label>
+      </div>
     </main>
 
   </div>

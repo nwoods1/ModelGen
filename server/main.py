@@ -110,6 +110,7 @@ class AppendReq(BaseModel):
     guidance_scale: Optional[float] = None
     num_inference_steps: Optional[int] = None
 
+
 # -------------------
 # Helpers: response materialization
 # -------------------
@@ -351,3 +352,5 @@ def session_append(req: AppendReq):
     }
     data["items"].append(item); _save_session(data)
     return GenResp(id=item["id"], url=item["url"])
+
+
