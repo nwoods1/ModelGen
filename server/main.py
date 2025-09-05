@@ -144,28 +144,54 @@ def _pick_candidate(strings) -> Optional[str]:
                 return s
     return strings[0] if strings else None
 
+# ... imports & setup unchanged ...
+
+print(f"[BOOT] STATIC_DIR={STATIC_DIR}")
+print(f"[BOOT] MODELS_DIR={MODELS_DIR}")
+
 def _materialize_to_models(result) -> Path:
     """
-    Normalize whatever the Space returns into a local file in /static/models,
-    supporting:
-      - full HTTP(s) URL
-      - Shap-E '/file=...' URLs (we prefix SPACE_URL)
-      - local path on our machine
-      - gradio asset tokens (download via client.download)
+    Take whatever the Space returned (URL, /file path, local temp, or gradio asset string),
+    and copy it into MODELS_DIR with a fresh UUID filename + correct extension.
     """
+    def _iter_strings(obj):
+        if obj is None: return
+        if isinstance(obj, str):
+            yield obj; return
+        if isinstance(obj, (list, tuple)):
+            for v in obj: yield from _iter_strings(v)
+            return
+        if isinstance(obj, dict):
+            # Gradio returns often nested 'data' structures
+            if "data" in obj: yield from _iter_strings(obj["data"])
+            for v in obj.values(): yield from _iter_strings(v)
+
+    def _pick_candidate(strings):
+        strings = list(strings) if strings else []
+        priority = (".glb", ".gltf", ".zip", ".ply", ".obj")
+        for ext in priority:
+            for s in strings:
+                if s.lower().strip().endswith(ext):
+                    return s
+        for ext in priority:
+            for s in strings:
+                if ext in s.lower():
+                    return s
+        return strings[0] if strings else None
+
     cand = _pick_candidate(_iter_strings(result))
     if not cand:
-        raise HTTPException(502, f"No file-like string in response: {str(result)[:200]}")
+        raise HTTPException(502, f"No file-like string in Space response: {str(result)[:200]}")
 
-    # Decide extension
     ext = ".glb"
     for e in (".glb", ".gltf", ".zip", ".ply", ".obj"):
         if e in cand.lower():
-            ext = e
-            break
-    out_path = MODELS_DIR / f"{uuid.uuid4().hex}{ext}"
+            ext = e; break
 
-    # HTTP(s)
+    out_path = MODELS_DIR / f"{uuid.uuid4().hex}{ext}"
+    print(f"[MATERIALIZE] candidate={cand} -> {out_path}")
+
+    # 1) http(s)
     if cand.startswith(("http://", "https://")):
         with requests.get(cand, stream=True, timeout=600) as r:
             if r.status_code != 200:
@@ -173,10 +199,9 @@ def _materialize_to_models(result) -> Path:
             with open(out_path, "wb") as f:
                 for chunk in r.iter_content(1024 * 1024):
                     f.write(chunk)
-        return out_path
 
-    # Shap-E local asset
-    if cand.startswith("/file"):
+    # 2) HuggingFace Space /file path
+    elif cand.startswith("/file"):
         url = f"{SPACE_URL}{cand}"
         with requests.get(url, stream=True, timeout=600) as r:
             if r.status_code != 200:
@@ -184,20 +209,29 @@ def _materialize_to_models(result) -> Path:
             with open(out_path, "wb") as f:
                 for chunk in r.iter_content(1024 * 1024):
                     f.write(chunk)
-        return out_path
 
-    # Local path
-    if os.path.exists(cand):
+    # 3) local path
+    elif os.path.exists(cand):
         shutil.copyfile(cand, out_path)
-        return out_path
 
-    # Gradio token -> download
-    try:
-        local_path = client.download(cand)
-        shutil.copyfile(local_path, out_path)
-        return out_path
-    except Exception as e:
-        raise HTTPException(502, f"Could not materialize asset: {e}")
+    # 4) gradio asset token
+    else:
+        try:
+            local_path = client.download(cand)
+            shutil.copyfile(local_path, out_path)
+        except Exception as e:
+            raise HTTPException(502, f"Could not materialize asset: {e}")
+
+    if not out_path.exists() or out_path.stat().st_size == 0:
+        raise HTTPException(502, f"Materialization failed; file missing: {out_path}")
+
+    print(f"[MATERIALIZE] wrote {out_path} ({out_path.stat().st_size} bytes)")
+    return out_path
+
+def _to_rel_url(out_path: Path) -> str:
+    # Always serve through /static mount
+    return f"/static/models/{out_path.name}"
+
 
 # -------------------
 # Helpers: sessions & prompts
