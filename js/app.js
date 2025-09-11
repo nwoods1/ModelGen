@@ -1,5 +1,5 @@
 // app.js
-import { createSession, appendEdit } from "./gradio_api.js";
+import { BACKEND, createSession, appendEdit } from "./gradio_api.js";
 import { viewer, loadGLB, getCurrentObject } from "./viewer.js";
 import {
   createOrGetSessionDoc,
@@ -124,7 +124,7 @@ function renderHistoryItems(items) {
       const btn = document.createElement("button");
       btn.textContent = "Load";
       btn.addEventListener("click", async () => {
-        const absolute = it.url.startsWith("http") ? it.url : `http://localhost:8000${it.url}`;
+        const absolute = it.url.startsWith("http") ? it.url : `${BACKEND}${it.url}`;
         setStatus("Loading from history…");
         await loadGLB(absolute);
         resetEditControls();

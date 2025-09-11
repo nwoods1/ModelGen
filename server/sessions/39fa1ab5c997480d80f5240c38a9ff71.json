@@ -1,0 +1,11 @@
+{
+  "id": "39fa1ab5c997480d80f5240c38a9ff71",
+  "title": "My 3D Session",
+  "created_at": 1757562688.9896123,
+  "defaults": {
+    "seed": 0,
+    "guidance_scale": 15.0,
+    "num_inference_steps": 64
+  },
+  "items": []
+}

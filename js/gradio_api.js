@@ -1,5 +1,5 @@
 // js/gradio_api.js
-const BACKEND = "http://localhost:8000";
+export const BACKEND = "http://localhost:8000";
 
 // --- one-off generation (optional) ---
 export async function textTo3D({ prompt, seed, guidance_scale, num_inference_steps, onStatus, onProgress }) {
@@ -55,7 +55,6 @@ export async function getSession(session_id) {
 }
 
 export async function gen3DBatch({ prompt, seeds, guidance_scale, num_inference_steps }) {
-  const BACKEND = "http://localhost:8000";
   const r = await fetch(`${BACKEND}/gen3d_batch`, {
     method: "POST",
     headers: { "Content-Type":"application/json" },

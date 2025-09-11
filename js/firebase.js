@@ -6,6 +6,7 @@ import {
   doc, setDoc, getDoc, collection, getDocs, query, orderBy, serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-firestore.js";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-storage.js";
+import { BACKEND } from "./gradio_api.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAImjDNmITwbNkazxdMQv3tksIla3IXKaQ",
@@ -63,7 +64,7 @@ export async function addItemToSession({ sessionId, itemId, prompt, params, back
   const u = await ensureAuth();
 
   // 1) Download GLB from your backend
-  const absUrl = backendUrl.startsWith("http") ? backendUrl : `http://localhost:8000${backendUrl}`;
+  const absUrl = backendUrl.startsWith("http") ? backendUrl : `${BACKEND}${backendUrl}`;
   const glbResp = await fetch(absUrl);
   if (!glbResp.ok) throw new Error(`Failed to fetch GLB (${glbResp.status})`);
   const glbBuf = await glbResp.arrayBuffer();
@@ -107,3 +108,6 @@ export async function listSessionItems(sessionId) {
   const snap = await getDocs(qy);
   return snap.docs.map(d => ({ id: d.id, ...d.data() }));
 }
+
+export { app, auth, db };
+export default app;
